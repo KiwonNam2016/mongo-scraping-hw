@@ -23,12 +23,16 @@ let ArticleSchema = new Schema({
 		type: String,
 		required: true,
 		trim:true
-	}
+	},
+
+	imageUrl:{
+		type: String,
+		trim: true
+	},
 
 	notes: [
 		{
 			type: Schema.Types.ObjectId,
-
 			ref: "Note"
 		}
 	]
