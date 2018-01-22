@@ -1,14 +1,38 @@
+<!-- handlebars template for the home page. This page will display scraped articles-->
 
-<!-- Navbar and header-->
-
-<nav>
-	<div class="nav-wrapper">
-		<a href="#" class="brand-logo">OSN - Onion Scraping Network</a>
-		<ul id="nav-mobile" class="left hide-on-med-and-down">
-	        <li><a href="sass.html">Home</a></li>
-	        <li><a href="badges.html">Saved Articles</a></li>
-	        <li><a href="collapsible.html" id="scrape">Scrape New Articles</a></li>
-      	</ul>
-    </div>
+<!-- Bootstrap Navbar-->
+<nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+  <!-- Navbar content -->
+	<a class="navbar-brand" href="#">Newsweek Web Scraper</a>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Saved Articles</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" id="scrape">Scrape</a>
+			</li>
+		</ul>
+	</div>
 </nav>
 
+<!-- Container that will hold the articles after they are scraped-->
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12 col-md-3 col-lg-4" style="display:inline-block;">
+			<div class="card">
+	  			<img class="card-img-top" src="{{this.imageUrl}}" alt="Card image cap">
+				<div class="card-body">
+					<h5 class="card-title"><a href="{{this.url}}">{{this.headline}}</a></h5>
+					<p class="card-text">{{this.summary}}</p>
+					<button type="button" class="btn btn-default btn-sm">
+          				<span class="glyphicon glyphicon-trash"></span> Remove Article
+        			</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

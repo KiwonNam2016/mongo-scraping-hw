@@ -1,9 +1,9 @@
 // import required dependencies
 let path = require("path");
 let axios = require("axios");
-let cheerio = require("cheerio"); 
-let mongoose = require("mongoose"); 
-let db = require("../models"); 
+let cheerio = require("cheerio");
+let mongoose = require("mongoose");
+let db = require("../models");
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
@@ -26,45 +26,47 @@ module.exports = (app) => {
 	// A GET route for scraping time magazine website
 	app.get("/scrape", (req, res) => {
 	  //grab the body of the html with request
-		axios.get("time.com").then( (response) => {
+		axios.get("www.newsweek.com").then( (response) => {
 		    // load resonse data into cheerio, save it to $ selector
 		    let $ = cheerio.load(response.data);
+
+            //array that will hold the result objects
+            let result = {};
 
 		    // grave the h2 tages within the article tags
 		    $("article").each( (i, element) => {
 	      	// Save an empty result object
-	      	let result = {};
 
-		      // Add text and href of every link, and save them as properties of the result object
-				result.headline = $(this).children("div")
-					.children("h2")
-					.children("a")
-					.text();
-				//url link to the actual article
-				result.url = $(this).children("div")
-					.children("h2")
-					.children("a")
-					.attr("herf");
-				//get the article "exerpt"
-				result.summary = $(this).children("div")
-					.children("p")
-					.text();
-				result.imageUrl = $(this)
-				  .children("figure")
-				  .children("a")
-				  .attr("src");
 
-				// Create a new Article using the `result` object built from scraping
-				db.Article
-					.create(result)
-					.then( (dbArticle) => {
-			  		// If we were able to successfully scrape and save an Article, send a message to the client
-			  		res.send("Scrape Complete");
-				})
-				.catch( (err) => {
-			  	// If an error occurred, send it to the client
-			  		res.json(err);
-				});
+    		    // Add text and href of every link, and save them as properties of the result object
+    			let headline = $(this).children("div")
+    				.children("h3")
+    				.children("a")
+    				.text();
+    			//url link to the actual article
+    			let url = $(this).children("div")
+    				.children("h3")
+    				.children("a")
+    				.attr("herf");
+    			//get the article "exerpt"
+    			let summary = $(this).children("div")
+    				.children("div")
+    				.text();
+    			let imageUrl = $(this).children("div")
+    			  .children("div")
+                  .children("picture")
+                  .children("img")
+    			  .attr("src");
+
+                articleObject = {
+                    headline: headline,
+                    url: url,
+                    summary: summary,
+                    imageUrl: imageUrl
+                };
+
+                //push the article object into results array
+                result.push(articleObject)
 	    	});
 	  	});
 	});
